@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+    <title>Messages</title>
+</head>
+
+<body>
+    <h1 style="color: blueviolet;">Message Board</h1>
+    <h2>Public messages</h2>
+    <ul>
+        {% for message in public_messages %}
+        <li><a href="readmessage/{{message.id}}">{{message.title}}</a> </li>
+        {% endfor %}
+    </ul>
+
+    <h2>My private notes</h2>
+    <ul>
+        {% for message in private_messages %}
+        <li><a href="readmessage/{{message.id}}"style="margin-right: 100px;">{{message.title}}</a> <a href="deletemessage/{{message.id}}">Delete note</a> </li>
+        {% endfor %}
+    </ul>
+    <br>
+
+    <h2>Add message</h2>
+    <form action='addmessage/' method='GET'>
+        <table style="width:40%; border-spacing: 30px;">
+            <tr>
+                <td><label for='title'>Message title</label></td>
+                <td><input type="text" name="title" required> </td>
+            </tr>
+            <tr>
+                <td><label for='content'>Message</label></td>
+                <td><textarea name="content" rows="4" cols="50" required></textarea></td>
+            </tr>
+            <tr>
+                <td><label for='private'>Public</label>
+                    <input type="checkbox" name="public">
+                </td>
+            </tr>
+            <tr>
+                <td><input type='submit'></td>
+            </tr>
+        </table>
+    </form>
+    <br>
+
+    <h2>Search messages</h2>
+    <form action='searchmessage/' method='POST'>
+        <table style="width:25%; border-spacing: 30px;">
+            <tr>
+                <td><label for='searchtext'>Search text</label></td>
+                <td><input type="text" name="searchtext" required> </td>
+            </tr>
+            <tr>
+                <td><input type='submit'></td>
+            </tr>
+        </table>
+    </form>
+
+    <br>
+    <form action='logout/' method='POST'>
+        {% csrf_token %}
+        <input type='submit' value='Logout'>
+    </form>
+</body>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<head>
+    <title>Messages</title>
+</head>
+
+<body>
+    <h1 style="color: blueviolet;">Message Board</h1>
+    <h2>Messages found containing search text : {{searchtext}}</h2>
+    <ul>
+        {% for message in messages %}
+        <li><a href="/readmessage/{{message.0}}">{{message.1}}</a> </li>
+        {% endfor %}
+    </ul>
+
+</body>
