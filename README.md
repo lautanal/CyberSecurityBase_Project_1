@@ -1,6 +1,6 @@
 # Cyber Security Base 2022, Project 1
 
-The project is based on a message board web application.  The application can store public messages that can be written and shared by everybody and also private notes, which are not public.  The board shows the titles of the ten most recent public messages.  The user can search for text in public messages and the user can delete his or her private notes.
+The project is based on a message board web application.  The application can store public messages that can be written and shared by everybody and also private notes, which are not public.  The board shows the titles of the ten most recent public messages, which can be viewed  A user can search for text in public messages and a user can delete his or her private notes.
 
 ## Install instructions
 - Clone the directory
@@ -12,13 +12,27 @@ The project is based on a message board web application.  The application can st
 - `alice:redqueen`
 - `bob:squarepants`
 
+The following vulnerabilities that are found in the code, correspond to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1 Broken access control:
+In a Broken Access Control violations happen when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things to unauthorised data.
+
+The flaw is visible in many parts of the code.  While logged in, the user can read or delete other persons messages just by replacing the message id with another one.  The code does not check that you are the legal owner of the message.
+
+While logged onto the site you can open ta message just by clicking on a link on the page. The page directs the user to the subdomain http://127.0.0.1/readmessage/<messageid\>. This means the attacker can input any number to the <messageid\> part of the url and therefore read other user’s private notes.
+
+
+
+This flaw is fixed by checking the user is the legal owner of the message, that is read or deleted.  
+
+that is logged in currently from the POST request in the code. The fixed code is a commented block starting at [Line 37](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L37).
+
+The issue is again visible in the GET request that is used to add secrets. While the addnote() function requires authentication to be executed, it does not verify that the correct user is logged in, but rather reads the username from the GET parameters. For example, Bob can add a secret to Alice's account by logging in and accessing /addnote?user=alice&note=HACKED&colour=%23ff0000.
+
+To fix this, we can simply remove the user field from the GET request, and make the addnote() function get the user object with request.user. Similarly to the previous exploit, it would also help to make the request go through POST and not GET.
+
 The exact source of this flaw is in the readnote() function starting at [Line 32](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L32).
 
-While logged onto the site you can open the raw data of a note by clicking a link on the page. The page directs the user to the subdomain http://127.0.0.1/readnote/<noteid\>. This means the attacker can input any number to the <noteid\> part of the url and therefore read other user’s private notes.
-
-This flaw is fixed by checking the user that is logged in currently from the POST request in the code. The fixed code is a commented block starting at [Line 37](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L37).
 
 How to reproduce:
 - Go to http://127.0.0.1:8000
