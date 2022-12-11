@@ -35,22 +35,20 @@ Location of the flaw: : views.py searchmessage() function [line 53](https://gith
 
 Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection where database queries are made without "cleaning" or "sanitizing" user data i.e. making sure it contains only what it is supposed to.
 
-The flaw in my code is in the searchmessage-function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input '-- , the attacker can see all private notes of other users.
+The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input '-- , the attacker can see all private notes of other users.
 
 The flaw can be fixed by parameterizing all user input.  If the user input is given to the SQL-query as parameters, the values of the user input are added to the SQL command at execution time in a controlled manner.  The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
 
 
 ## FLAW 3: Cross-Site Request Forgery (CSRF)
 
-Locations of the flaw: views.py addmessage() function [line 16](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L17), 
+Locations of the flaw: views.py addmessage() function [line 17](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L17), 
     index.html [line 25](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/templates/messenger/index.html#L25)
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The 
+The flaws in my code are in function addmessage() and in index.html file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator.  The index.html file should have {% csrf_token %} added to every form to force the CSRF cookie.
     
-    In other words, if a user is logged into, for example, their banks website, a malicious agent can send an unsolicited email or plant an exploit on a site they know the target is going to visit. If the website is vulnerable to CSRF, the attacker can implant a malicious url in an HTML image or link, or if the target website only accepts POST requests, then through an HTML form and some javascript. Once executed it looks like the target has willfully transferred funds to the attacker with no way to remedy the situation other than contacting the bank itself and trying to seek help through them.
-
 To fix these flaws we only need to add {% csrf_token %} to each form in our application and Django will take care of the rest.
 
 
