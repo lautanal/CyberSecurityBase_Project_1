@@ -12,6 +12,7 @@ def index(request):
     private_messages = Message.objects.filter(sender_id=request.user.id).filter(private = True).order_by("pub_date")
     return render(request, "messenger/index.html", { "private_messages" : private_messages, "public_messages" : public_messages })
 
+# Add message, this path can reveal sensitive data
 @login_required
 def addmessage(request):
     message = Message()
@@ -27,30 +28,23 @@ def addmessage(request):
     message.save()
     return redirect("/")
 
+# Read message, this path is prone to broken access control attack
 @login_required
 def readmessage(request, noteid):
      message = Message.objects.get(pk=noteid)
      response = HttpResponse(message.content, content_type="text/html")
      return response
 
-## Flaws 1, 3 and 5 are fixed by replacing the other readmessage function with this one
-# @login_required
-# def readmessage(request, noteid):
-#     message = Message.objects.get(pk=noteid)
-#     if request.user == message.sender:
-#         response = HttpResponse(message.content, content_type="text/plain")
-#         return response
-#     else:
-#         return render(request, "messenger/forbidden.html")
 
-
-# This path is prone to 
+# Delete message, this path is prone to broken access control attack
+@login_required
 def deletemessage(request, noteid):
     Message.objects.get(pk=noteid).delete()
     return redirect("/")
 
 # This path is prone to SQL injection
 @csrf_exempt
+@login_required
 def searchmessage(request):
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()

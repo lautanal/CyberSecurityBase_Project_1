@@ -22,6 +22,7 @@
 
     <h2>Add message</h2>
     <form action='addmessage/' method='GET'>
+        {% csrf_token %}
         <table style="width:40%; border-spacing: 30px;">
             <tr>
                 <td><label for='title'>Message title</label></td>
@@ -45,6 +46,7 @@
 
     <h2>Search messages</h2>
     <form action='searchmessage/' method='POST'>
+        {% csrf_token %}
         <table style="width:25%; border-spacing: 30px;">
             <tr>
                 <td><label for='searchtext'>Search text</label></td>
