@@ -15,43 +15,28 @@ The project is based on a message board web application.  The application stores
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1 Broken access control:
-Locations of flaws: https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L32 
+Locations of the flaw: https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L32 
 
-A Broken Access Control violation happen when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
+A Broken Access Control violation happens when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
 The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain http://127.0.0.1:8000/readmessage/<messageid>, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the <messageid> part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
 
-The flaw can be corrected simply by adding one if statement that checks that the user is the owner of the message:
+The flaw can be corrected simply by adding an if statement that checks that the user is the owner of the message:
      if request.user == message.sender:
          response = HttpResponse(message.content, content_type="text/plain")
          return response
      else:
          return render(request, "messenger/forbidden.html")
-    
-How to reproduce:
-- Go to http://127.0.0.1:8000
-- Login as alice:redqueen
-- Add a note if none are present
-- Click a raw note data or go to http://127.0.0.1:8000/readnote/0-100
-- Change the number at the end of the link and view other users notes
-- You can also logout and try to view the url
 
 
 ## Flaw 2 Injection:
-The exact source of the flaw is in the deletenote() function at [Line 47](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L47).
+Location of the flaw: https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L53 
 
-The delete function is deleting notes with sql code and inputting the user’s request into the command as a variable. Nothing is done to sanitize the input and therefore it’s possible to easily delete everything from the tables. I’m not very good at sql injection so I’m not sure if you could pull data and see it from the table when the command starts with delete. Maybe something could be done with unions. Also as there are no checks to see if the user deleting the note owns the note, if the attacker knows the contents of another user’s private note they can delete if just like that.
+Injection is a vulnerability in the code where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection where database queries are made without "cleaning" or "sanitizing" user data i.e. making sure it contains only what it is supposed to.
 
-- How to reproduce:
-- Go to http://127.0.0.1:8000
-- Login as alice:redqueen
-- Make sure you have a few notes added
-- Try to delete: a' or 1=1 or 1='
-- Every note will get deleted.
+The flaw in my code is in the searchmessage-function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input '-- , the attacker can see all private notes of other users.
 
-There are many fixes you could do, I decided to go with django’s model system and just delete the note with commands from that, this way the user’s text variable only gets passed to the django function and django can handle input sanitizing. Another fix I added was to check if the note is actually owned by the user wanting to delete that note.
-
-The fix is in the new deletenote() function at [Line 56](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/86e948124991af5bdd55a5872a9ec45945dc9fd8/notes/views.py#L56).
+The flaw can be corrected by parameterizing all user input.  If the user input is given to the SQL-query as parameters, the values of the user input are added to the SQL command at execution time in a controlled manner.  The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
 
 
 ## FLAW 2 Security misconfiguration:
