@@ -33,7 +33,7 @@ The flaw can be fixed simply by adding an if statement that checks that the user
 ## FLAW 2: Injection
 Location of the flaw: : `views.py searchmessage()` function [line 58](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L58)
 
-Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection where database queries are made without "cleaning" or "sanitizing" user data i.e. making sure it contains only what it is supposed to.
+Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
 
 The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input `'--` , the attacker can see all private notes of other users.
 
@@ -47,7 +47,7 @@ Locations of the flaw: `views.py addmessage()` function [line 19](https://github
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator.  The `index.html` file should have `{% csrf_token %}` added to every form to force the CSRF cookie implementation.
+The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator in my code.  The `index.html` file is missing `{% csrf_token %} which forces the CSRF token to be sent.
     
 To fix these flaws we only need to add `{% csrf_token %}` to each form in our application and Django will take care of the rest.
 
