@@ -8,9 +8,10 @@ The project is based on a message board web application.  The application stores
 - Start the server with: python manage.py runserver
 
 ##### Users already in the system:  
-- `admin:samsung111`
-- `alice:redqueen`
-- `bob:squarepants`
+- `admin:admin`
+- `anna:annansalasana`
+- `janne:jannensalasana`
+- `lasse:lassensalasana`
 
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
@@ -53,7 +54,7 @@ To fix these flaws we only need to add `{% csrf_token %}` to each form in our ap
 
 
 
-## FLAW 4: XSS
+## FLAW 4: Cross-Site Scripting (XSS)
 Location of the flaw: `views.py readmessage()` function [line 39](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L39).
 
 The present application renders messages as `html` in the `readmessage()` function. This means that Javascript code can be put between `<script>` tags in the message to be executed when any user opens the message.
@@ -62,8 +63,10 @@ The flaw can be easily fixed with a change to render the messages as plain text.
 
 
 
-## FLAW 5: Security Logging and Monitoring Failures
+## FLAW 5: Insufficient Logging & Monitoring
 
-Failures in security logging and monitoring are flaws that lead to inability to detect malicious use. Not only does this mean that responding to these breaches is impossible (since one does not even know they are happening), but the root cause of these breaches remains unearthed. Proper logging and monitoring is essential in making sure that one can act in response to security breaches and fix any vulnerabilities as they give a hint to the developer as to how to correct them.
+Failures in security logging and monitoring are flaws that lead to inability to detect malicious use of system. Without monitoring responding to breaches is impossible since one does not even know they are happening. Proper logging and monitoring are essential in making sure that one can react to security breaches and fix any vulnerabilities immediately.
 
-As there is no logger currently in use in the project, fixing this flaw requires us to simply add a logger to our project and then configure it to log any important actions in our app. We could for example log every time that a poll is created or voted on or the adming logs in to the app etc. 
+There is no logger currently in use in the project.  There is no way to detect attackers using the vulnerabilities of the code for malicious requests.
+
+Fixing this issue requires proper monitoring to be set up.  We can simply add a logger to our project and configure it to log important actions in the app. We could for example log every time that a message is created or the admin logs etc. The monitoring function can be achieved with proper middleware as well.  
