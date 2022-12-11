@@ -1,6 +1,6 @@
 # Cyber Security Base 2022, Project 1
 
-The project is based on a message board web application.  The application stores public messages that can be written and shared by everybody. The message board shows the titles of the ten most recent messages, which can be viewed by clicking the title link.  Besides that a user can store private notes, which are not public.  A user can search for text in the public messages and can delete his or her own private notes.  
+The project is based on a message board web application.  The application stores public messages that can be written and shared by everybody. The message board shows the titles of the ten most recent messages, which can be viewed by clicking the title link.  Besides that a user can store private notes, which are not public.  A user can search for a text string in the public messages and can delete his or her own private notes.  
 
 ## Install instructions
 - Clone the directory
@@ -15,11 +15,11 @@ The project is based on a message board web application.  The application stores
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1: Broken access control
-Location of the flaw: views.py readmessage() function [line 35](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L35)
+Location of the flaw: `views.py readmessage()` function [line 35](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L35)
 
 A Broken Access Control violation happens when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
-The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain http://127.0.0.1:8000/readmessage/<messageid>, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the <messageid> part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
+The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain `http://127.0.0.1:8000/readmessage/<messageid>`, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the `<messageid>` part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
 
 The flaw can be fixed simply by adding an if statement that checks that the user is the owner of the message:
 ```
@@ -54,19 +54,9 @@ To fix these flaws we only need to add {% csrf_token %} to each form in our appl
 
 
 ## FLAW 4: XSS
-Location of the flaw: views.py readmessage() function [line 36](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L36).
+Location of the flaw: `views.py readmessage()` function [line 36](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L36).
 
 Adding a note and then viewing the note’s data in the browser will render that note as html. This means you can put javascript between <script> tags to execute whenever any user opens that message.
-
-How to reproduce:
-- Go to http://127.0.0.1:8000
-- Login as alice:redqueen
-- Add a note with <script\>alert(1)</script\> and set to public if you want to test on another account
-- Click the note’s raw note data and observe the alert
-- Optionally login with another account
-- Logout and login with bob:squarepants
-- Open the public note’s raw note data
-- Observer the alert popping up
 
 The current way the server handles notes can be fixed with a quick hack to render the notes in as plain text. This is shown in the fixed readnote() function at [Line 37](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L37). Instead of setting the content_type of the response to text/html, we set it to text/plain. This will make it so no html is parsed when the page is opened. The better way to fix this would be to actually sanitize the input and not have a dedicated page to see the “raw data” of notes, but as this is an exercise I thought this quick hack would be good.
 

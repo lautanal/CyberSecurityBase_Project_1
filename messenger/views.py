@@ -29,11 +29,12 @@ def addmessage(request):
     message.save()
     return redirect("/")
 
-# Read message, this path is prone to broken access control attack
+# Read message, this path is prone to broken access control attack and cross-site scripting
 @login_required
 def readmessage(request, noteid):
      message = Message.objects.get(pk=noteid)
      response = HttpResponse(message.content, content_type="text/html")
+#     response = HttpResponse(message.content, content_type="text/html")  # The previous line should be replaced with this one
      return response
 
 
