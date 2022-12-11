@@ -15,7 +15,7 @@ The project is based on a message board web application.  The application stores
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1: Broken access control
-Location of the flaw: `views.py readmessage()` function [line 35](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L35)
+Location of the flaw: `views.py readmessage()` function [line 38](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L38)
 
 A Broken Access Control violation happens when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
@@ -31,7 +31,7 @@ The flaw can be fixed simply by adding an if statement that checks that the user
 ```
 
 ## FLAW 2: Injection
-Location of the flaw: : `views.py searchmessage()` function [line 53](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L53)
+Location of the flaw: : `views.py searchmessage()` function [line 58](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L58)
 
 Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection where database queries are made without "cleaning" or "sanitizing" user data i.e. making sure it contains only what it is supposed to.
 
@@ -42,23 +42,23 @@ The flaw can be fixed by parameterizing all user input.  If the user input is gi
 
 ## FLAW 3: Cross-Site Request Forgery (CSRF)
 
-Locations of the flaw: `views.py addmessage()` function [line 17](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L17), 
+Locations of the flaw: `views.py addmessage()` function [line 19](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L19), 
     `index.html` [line 25](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/templates/messenger/index.html#L25)
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The flaws in my code are in the addmessage() function and in the index.html file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator.  The index.html file should have {% csrf_token %} added to every form to force the CSRF cookie.
+The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator.  The `index.html` file should have `{% csrf_token %}` added to every form to force the CSRF cookie implementation.
     
-To fix these flaws we only need to add {% csrf_token %} to each form in our application and Django will take care of the rest.
+To fix these flaws we only need to add `{% csrf_token %}` to each form in our application and Django will take care of the rest.
 
 
 
 ## FLAW 4: XSS
-Location of the flaw: `views.py readmessage()` function [line 36](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L36).
+Location of the flaw: `views.py readmessage()` function [line 39](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L39).
 
-Adding a note and then viewing the note’s data in the browser will render that note as html. This means you can put javascript between <script> tags to execute whenever any user opens that message.
+The present application renders messages are as `html` in the `readmessage()` function. This means that `Javascript` code can be put between `<script>` tags in the message to be executed when any user opens the message.
 
-The current way the server handles notes can be fixed with a quick hack to render the notes in as plain text. This is shown in the fixed readnote() function at [line 37](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L37). Instead of setting the content_type of the response to text/html, we set it to text/plain. This will make it so no html is parsed when the page is opened. The better way to fix this would be to actually sanitize the input and not have a dedicated page to see the “raw data” of notes, but as this is an exercise I thought this quick hack would be good.
+The flaw can be easily fixed with a change to render the messages in as plain text. This is shown in the commented `readnote()` function at [line 40](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L40). Instead of setting the content_type of the response to text/html, we set it to text/plain. This will prevent html parsing and Javascript when the page is opened. The better way to fix this would be to actually sanitize the input and not have a dedicated html page to view the message.
 
 
 
