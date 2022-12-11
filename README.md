@@ -51,7 +51,7 @@ Locations of the flaw: `views.py addmessage()` function [line 19](https://github
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks, but it is exempted by a Python decorator in my code.  The `index.html` file is missing `{% csrf_token %}` which forces the CSRF token to be sent.
+The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks, but it is exempted by a Python decorator in my code.  The `index.html` file is missing the definition `{% csrf_token %}` which forces the CSRF token to be sent.
     
 To fix these flaws we only need to add `{% csrf_token %}` to each form in our application and Django will take care of the rest.
 
@@ -70,6 +70,6 @@ The flaw can be easily fixed with a change to render the messages as plain text.
 
 Failures in security logging and monitoring are flaws that lead to inability to detect malicious use of system. Without monitoring responding to breaches is impossible since one does not even know they are happening. Proper logging and monitoring are essential in making sure that one can react to security breaches and fix any vulnerabilities immediately.
 
-There is no logger currently in use in the project.  There is no way to detect attackers using the vulnerabilities of the code for malicious requests.
+There is no logger currently in use in the project.  There is no way to detect attackers that are using the vulnerabilities of the code for malicious requests.
 
 Fixing this issue requires proper monitoring to be set up.  We can simply add a logger to our project and configure it to log important actions in the app. We could for example log every time that a message is created or the admin logs etc. The monitoring function can be achieved with proper middleware as well.  
