@@ -42,8 +42,8 @@ The flaw can be corrected by parameterizing all user input.  If the user input i
 
 ## FLAW 3: Cross-Site Request Forgery (CSRF)
 
-Location of the flaw: addmessage() function [Line 17](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L17)
-                    index.html [line 25](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/templates/messenger/index.html#L25)
+Location of the flaw: views.py addmessage() function [line 16](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L16), 
+    index.html [line 25](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/templates/messenger/index.html#L25)
 
 
 Cross-site request forgery is an attack where existing user priviliges (cookies or tokens) of an authenticated user on a computer are used to make malicious requests and access private user data. In other words, if a user is logged in to, for example, their banks website, a malicious agent can send an unsolicited email or plant an exploit on a site they know the target is going to visit. If the website is vulnerable to CSRF, the attacker can implant a malicious url in an HTML image or link, or if the target website only accepts POST requests, then through an HTML form and some javascript. Once executed it looks like the target has willfully transferred funds to the attacker with no way to remedy the situation other than contacting the bank itself and trying to seek help through them.
