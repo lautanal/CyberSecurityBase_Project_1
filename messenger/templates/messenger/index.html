@@ -21,8 +21,8 @@
     <br>
 
     <h2>Add message</h2>
-    <form action='addmessage/' method='GET'>
-        {% csrf_token %}
+    <form action='addmessage/' method='POST'>
+<!--    This line should be added    {% csrf_token %} -->
         <table style="width:40%; border-spacing: 30px;">
             <tr>
                 <td><label for='title'>Message title</label></td>

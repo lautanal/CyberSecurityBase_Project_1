@@ -12,16 +12,17 @@ def index(request):
     private_messages = Message.objects.filter(sender_id=request.user.id).filter(private = True).order_by("pub_date")
     return render(request, "messenger/index.html", { "private_messages" : private_messages, "public_messages" : public_messages })
 
-# Add message, this path can reveal sensitive data
+# Add message, this path can be used in a CSRF attack
 @login_required
+@csrf_exempt # this line should be removed, there is no CSRF protection
 def addmessage(request):
     message = Message()
-    message.title = request.GET["title"]
-    message.content = request.GET["content"]
+    message.title = request.POST["title"]
+    message.content = request.POST["content"]
     message.pub_date = timezone.now()
     message.sender = request.user
     try:
-        if request.GET["public"] == "on":
+        if request.POST["public"] == "on":
             message.private = False
     except:
         message.private = True
@@ -43,7 +44,6 @@ def deletemessage(request, noteid):
     return redirect("/")
 
 # This path is prone to SQL injection
-@csrf_exempt
 @login_required
 def searchmessage(request):
     conn = sqlite3.connect("db.sqlite3")
