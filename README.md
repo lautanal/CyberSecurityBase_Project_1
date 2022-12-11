@@ -35,7 +35,7 @@ Location of the flaw: : `views.py searchmessage()` function [line 58](https://gi
 
 Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
 
-The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input `'--` , the attacker can see all private notes of other users.
+The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input `'--` the attacker can see all private notes of other users.
 
 The flaw can be fixed by parameterizing all user input.  If the user input is given to the SQL-query as parameters, the values of the user input are added to the SQL command at execution time in a controlled manner.  The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
 
@@ -47,7 +47,7 @@ Locations of the flaw: `views.py addmessage()` function [line 19](https://github
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks but it is exempted by a Python decorator in my code.  The `index.html` file is missing `{% csrf_token %} which forces the CSRF token to be sent.
+The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks, but it is exempted by a Python decorator in my code.  The `index.html` file is missing `{% csrf_token %}` which forces the CSRF token to be sent.
     
 To fix these flaws we only need to add `{% csrf_token %}` to each form in our application and Django will take care of the rest.
 
