@@ -27,6 +27,7 @@ def addmessage(request):
     message.save()
     return redirect("/")
 
+@login_required
 def readmessage(request, noteid):
      message = Message.objects.get(pk=noteid)
      response = HttpResponse(message.content, content_type="text/html")
@@ -43,17 +44,19 @@ def readmessage(request, noteid):
 #         return render(request, "messenger/forbidden.html")
 
 
+# This path is prone to 
 def deletemessage(request, noteid):
     Message.objects.get(pk=noteid).delete()
     return redirect("/")
 
+# This path is prone to SQL injection
 @csrf_exempt
 def searchmessage(request):
     conn = sqlite3.connect("db.sqlite3")
     cursor = conn.cursor()
     text_to_search = request.POST["searchtext"]
     try:
-        result = cursor.execute("SELECT * FROM messenger_message WHERE content LIKE '%" + text_to_search + "%';")
+        result = cursor.execute("SELECT * FROM messenger_message WHERE content LIKE '%" + text_to_search + "%' AND private=false;")
         messages = result.fetchall()
         print("FOUND: ", messages)
         return render(request, "messenger/search.html", { "searchtext" : text_to_search, "messages" : messages })

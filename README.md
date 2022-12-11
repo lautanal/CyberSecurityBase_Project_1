@@ -1,6 +1,6 @@
 # Cyber Security Base 2022, Project 1
 
-The project is based on a message board web application.  The application can store public messages that can be written and shared by everybody and also private notes, which are not public.  The board shows the titles of the ten most recent public messages, which can be viewed  A user can search for text in public messages and a user can delete his or her private notes.
+The project is based on a message board web application.  The application stores public messages that can be written and are shared by everybody. The board shows the titles of the ten most recent messages, which can be viewed by clicking the link.  Besides that the application can store private notes, which are not public.  A user can search for text in the public messages and can delete his or her private notes.  
 
 ## Install instructions
 - Clone the directory
@@ -15,12 +15,19 @@ The project is based on a message board web application.  The application can st
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1 Broken access control:
-Locations of flaws: https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L9 
+Locations of flaws: https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L32 
 
 A Broken Access Control violation happen when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
 The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain http://127.0.0.1:8000/readmessage/<messageid>, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the <messageid> part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
 
+The flaw can be corrected simply by adding one if statement that checks that the user is the owner of the message:
+     if request.user == message.sender:
+         response = HttpResponse(message.content, content_type="text/plain")
+         return response
+     else:
+         return render(request, "messenger/forbidden.html")
+    
 How to reproduce:
 - Go to http://127.0.0.1:8000
 - Login as alice:redqueen
