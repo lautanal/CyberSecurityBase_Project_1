@@ -2,6 +2,9 @@
 
 The project is based on a message board web application.  The application stores public messages that can be written and shared by everybody. The message board shows the titles of the ten most recent messages, which can be viewed by clicking the title link.  Besides that a user can store private notes, which are not public.  A user can search for a text string in the public messages and can delete his or her own private notes.  
 
+## Link to Repository
+The Github repository containing the project can be found [here](https://github.com/lautanal/CyberSecurityBase_Project_1)
+
 ## Install instructions
 - Clone the directory
 - Make a virtualenvironment from the requirements.txt
