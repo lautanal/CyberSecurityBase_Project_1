@@ -15,13 +15,13 @@ The project is based on a message board web application.  The application stores
 In the code you can find the following vulnerabilities.  The vulnerabilities are classified according to the OWASP 2017 list of top ten security risks.
 
 ## FLAW 1: Broken access control
-Location of the flaw: readmessage() function [line 32](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L34)
+Location of the flaw: views.py readmessage() function [line 32](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L34)
 
 A Broken Access Control violation happens when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
 The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain http://127.0.0.1:8000/readmessage/<messageid>, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the <messageid> part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
 
-The flaw can be corrected simply by adding an if statement that checks that the user is the owner of the message:
+The flaw can be fixed simply by adding an if statement that checks that the user is the owner of the message:
 ```
     if request.user == message.sender:
          response = HttpResponse(message.content, content_type="text/plain")
@@ -31,24 +31,27 @@ The flaw can be corrected simply by adding an if statement that checks that the 
 ```
 
 ## FLAW 2: Injection
-Location of the flaw: : searchmessage() function [line 53](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L53)
+Location of the flaw: : views.py searchmessage() function [line 53](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L53)
 
 Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection where database queries are made without "cleaning" or "sanitizing" user data i.e. making sure it contains only what it is supposed to.
 
 The flaw in my code is in the searchmessage-function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input '-- , the attacker can see all private notes of other users.
 
-The flaw can be corrected by parameterizing all user input.  If the user input is given to the SQL-query as parameters, the values of the user input are added to the SQL command at execution time in a controlled manner.  The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
+The flaw can be fixed by parameterizing all user input.  If the user input is given to the SQL-query as parameters, the values of the user input are added to the SQL command at execution time in a controlled manner.  The SQL engine checks each parameter to ensure that it is correct for its column and are treated literally, and not as part of the SQL to be executed.
 
 
 ## FLAW 3: Cross-Site Request Forgery (CSRF)
 
-Location of the flaw: views.py addmessage() function [line 16](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L16), 
+Locations of the flaw: views.py addmessage() function [line 16](https://github.com/yostiq/mooc-cybersecurity-project-1/blob/c891e3dfc9ff30449589a0a205d1401bda2c1c36/notes/views.py#L16), 
     index.html [line 25](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/templates/messenger/index.html#L25)
 
+Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-Cross-site request forgery is an attack where existing user priviliges (cookies or tokens) of an authenticated user on a computer are used to make malicious requests and access private user data. In other words, if a user is logged in to, for example, their banks website, a malicious agent can send an unsolicited email or plant an exploit on a site they know the target is going to visit. If the website is vulnerable to CSRF, the attacker can implant a malicious url in an HTML image or link, or if the target website only accepts POST requests, then through an HTML form and some javascript. Once executed it looks like the target has willfully transferred funds to the attacker with no way to remedy the situation other than contacting the bank itself and trying to seek help through them.
+The 
+    
+    In other words, if a user is logged into, for example, their banks website, a malicious agent can send an unsolicited email or plant an exploit on a site they know the target is going to visit. If the website is vulnerable to CSRF, the attacker can implant a malicious url in an HTML image or link, or if the target website only accepts POST requests, then through an HTML form and some javascript. Once executed it looks like the target has willfully transferred funds to the attacker with no way to remedy the situation other than contacting the bank itself and trying to seek help through them.
 
-To fix these flaws we only need to add {% csrf_token %} to each form in our application and django will take care of the rest. (The CSRF flaw is fixed in my project so that the demo app runs)
+To fix these flaws we only need to add {% csrf_token %} to each form in our application and Django will take care of the rest.
 
 
 ## FLAW 3: Security misconfiguration
