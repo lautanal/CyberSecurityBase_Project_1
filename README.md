@@ -19,7 +19,7 @@ Location of the flaw: `views.py readmessage()` function [line 38](https://github
 
 A Broken Access Control violation happens when a user is able to access functions or parts of data that are outside of his or her intended permissions.  Attackers can exploit this to access, add, modify, remove, or do other things with unauthorised data.
 
-The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain `http://127.0.0.1:8000/readmessage/<messageid>`, where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the `<messageid>` part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
+The flaw is visible in many parts of the code.  While logged into the site, you can open a message just by clicking a link on the page. The page directs the user to the subdomain `http://127.0.0.1:8000/readmessage/<messageid>` where you can read the message. The code does not check that you are the legal owner of the message.  This gives the attacker a possibility to replace the `<messageid>` part of the url with any number and therefore read other user’s private notes.  You can delete other user's messages in the same fashion.
 
 The flaw can be fixed simply by adding an if statement that checks that the user is the owner of the message:
 ```
@@ -33,7 +33,7 @@ The flaw can be fixed simply by adding an if statement that checks that the user
 ## FLAW 2: Injection
 Location of the flaw: : `views.py searchmessage()` function [line 58](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L58)
 
-Injection is a vulnerability in the code, where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
+Injection is a vulnerability in the code where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
 
 The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input `'--` the attacker can see all private notes of other users.
 
@@ -56,9 +56,9 @@ To fix these flaws we only need to add `{% csrf_token %}` to each form in our ap
 ## FLAW 4: XSS
 Location of the flaw: `views.py readmessage()` function [line 39](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L39).
 
-The present application renders messages are as `html` in the `readmessage()` function. This means that `Javascript` code can be put between `<script>` tags in the message to be executed when any user opens the message.
+The present application renders messages as `html` in the `readmessage()` function. This means that `Javascript` code can be put between `<script>` tags in the message to be executed when any user opens the message.
 
-The flaw can be easily fixed with a change to render the messages in as plain text. This is shown in the commented `readnote()` function at [line 40](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L40). Instead of setting the content_type of the response to text/html, we set it to text/plain. This will prevent html parsing and Javascript when the page is opened. The better way to fix this would be to actually sanitize the input and not have a dedicated html page to view the message.
+The flaw can be easily fixed with a change to render the messages as plain text. This is shown in the commented `readnote()` function at [line 40](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L40). Instead of setting the content_type of the response to text/html, we set it to text/plain. This will prevent html parsing and Javascript when the page is opened. The better way to fix this would be to actually sanitize the input and not have a dedicated html page to view the message.
 
 
 

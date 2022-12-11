@@ -37,7 +37,7 @@ def addmessage(request):
 def readmessage(request, noteid):
      message = Message.objects.get(pk=noteid)
      response = HttpResponse(message.content, content_type="text/html")
-#     response = HttpResponse(message.content, content_type="text/html")  # The previous line should be replaced with this one
+#     response = HttpResponse(message.content, content_type="text/plain")  # The previous line should be replaced with this one
      return response
 
 
