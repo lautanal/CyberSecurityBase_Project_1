@@ -6,11 +6,13 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 import sqlite3
 
+
 @login_required
 def index(request):
     public_messages = Message.objects.filter(private = False).order_by("-pub_date")[:10]
     private_messages = Message.objects.filter(sender_id=request.user.id).filter(private = True).order_by("pub_date")
     return render(request, "messenger/index.html", { "private_messages" : private_messages, "public_messages" : public_messages })
+
 
 # Add message, this path can be used in a CSRF attack
 @login_required
@@ -29,6 +31,7 @@ def addmessage(request):
     message.save()
     return redirect("/")
 
+
 # Read message, this path is prone to broken access control attack and cross-site scripting
 @login_required
 def readmessage(request, noteid):
@@ -44,6 +47,7 @@ def deletemessage(request, noteid):
     Message.objects.get(pk=noteid).delete()
     return redirect("/")
 
+
 # This path is prone to SQL injection
 @login_required
 def searchmessage(request):
@@ -57,10 +61,3 @@ def searchmessage(request):
         return render(request, "messenger/search.html", { "searchtext" : text_to_search, "messages" : messages })
     except:
         return redirect("/")
-
-## Flaw 4 fixed with this function
-# @login_required
-# def deletemessage(request):
-#     message_to_delete = request.POST["content"]
-#     Message.objects.filter(content = message_to_delete, sender = request.user).delete()
-#     return redirect("/")
