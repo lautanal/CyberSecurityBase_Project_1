@@ -37,7 +37,7 @@ The flaw can be fixed simply by adding an if statement that checks that the user
 ## FLAW 2: Injection
 Location of the flaw: : `views.py searchmessage()` function [line 58](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L58)
 
-Injection is a vulnerability in the code where a malicious user can send code to the server hidden as regular user data, which is executed as commands on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
+Injection is a vulnerability in the code where a malicious user can send code to the server hidden as regular user data, which is executed as a command on the server. One of the most common forms of injection is SQL injection, where database queries are made without "sanitizing" user data i.e. making sure it contains only what it is supposed to do.
 
 The flaw in my code is in the search message function SQL-query.  The searched text is simply concatenated to the body of the SQL-query.  This gives an attacker a possibility to add malicious code to the search query.  For example with input `'--` the attacker can see all private notes of other users.
 
