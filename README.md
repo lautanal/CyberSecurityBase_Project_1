@@ -51,7 +51,7 @@ Locations of the flaw: `views.py addmessage()` function [line 19](https://github
 
 Cross-site request forgery is an attack where existing user priviliges of an authenticated user are used to make malicious requests and access private user data. A CSRF attack takes advantage of the fact that applications do not have the capacity to recognize the difference between malicious and secure requests once a user is authenticated. Attackers usually initiate the process by creating a corrupted link that they send to the target via email, text, or chat.
 
-The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection against CSRF attacks, but in my code protection is exempted by a Python decorator.  The `index.html` file is also missing the tag `{% csrf_token %}` which forces the CSRF token to be sent.
+The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection against CSRF attacks, but in my code protection is exempted by a Python decorator.  The `index.html` file is also missing the tag `{% csrf_token %}` which forces sending of the CSRF token to.
     
 To fix these flaws we only need to add the`{% csrf_token %}`tag to each form in our application and Django will take care of the rest.
 
