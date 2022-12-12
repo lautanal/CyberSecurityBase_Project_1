@@ -60,7 +60,7 @@ To fix these flaws we only need to add `{% csrf_token %}`tag to each form in our
 ## FLAW 4: Cross-Site Scripting (XSS)
 Location of the flaw: `views.py readmessage()` function [line 39](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L39).
 
-The present application renders messages as `html` in the `readmessage()` function. This means that Javascript code can be put between `<script>` tags in the message to be executed when any user opens the message.
+The present application renders messages as `html` in the `readmessage()` function. This means that Javascript code can be put between `<script>` tags in the message and will be executed anytime a user opens the message.
 
 The flaw can be easily fixed with a change to render the messages as plain text. This is shown in the commented `readnote()` function at [line 40](https://github.com/lautanal/CyberSecurityBase_Project_1/blob/main/messenger/views.py#L40). Instead of setting the content type of the response to `text/html`, we set it to `text/plain`. This will prevent html parsing and Javascript execution when the page is opened. A better way to fix this issue would be to actually sanitize the input and to have a dedicated html page to view the message.
 
