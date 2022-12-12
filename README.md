@@ -1,6 +1,6 @@
 # Cyber Security Base 2022, Project 1
 
-The project is based on a message board web application.  The application stores public messages that can be written and shared by everybody. The message board shows the titles of the ten most recent messages, which can be viewed by clicking the title link.  Besides that a user can store private notes, which are not public.  A user can search for a text string in the public messages and can delete his or her own private notes.  
+The project is based on a message board web application.  The application stores public messages that can be written and read by everybody. The message board shows the titles of the ten most recent messages, which can be viewed by clicking the title link.  Besides that a user can store private notes, which are not public.  A user can search for a text string in the public messages and can delete his or her own private notes.  
 
 ## Link to Repository
 https://github.com/lautanal/CyberSecurityBase_Project_1
@@ -53,7 +53,7 @@ Cross-site request forgery is an attack where existing user priviliges of an aut
 
 The flaws in my code are in the `addmessage()` function and in the `index.html` file.  Django provides protection for CSRF attacks, but it is exempted by a Python decorator in my code.  The `index.html` file is missing the definition `{% csrf_token %}` which forces the CSRF token to be sent.
     
-To fix these flaws we only need to add `{% csrf_token %}` to each form in our application and Django will take care of the rest.
+To fix these flaws we only need to add `{% csrf_token %}`tag to each form in our application and Django will take care of the rest.
 
 
 
