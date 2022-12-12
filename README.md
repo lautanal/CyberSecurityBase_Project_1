@@ -68,7 +68,7 @@ The flaw can be easily fixed by rendering the messages as plain text. This is sh
 
 ## FLAW 5: Insufficient Logging & Monitoring
 
-Failures in security logging and monitoring are flaws that lead to inability to detect malicious use of system. Without monitoring responding to breaches is impossible since one does not even know what is happening. Proper logging and monitoring are essential in making sure that one can react to security breaches and fix any vulnerabilities immediately.
+Failures in security logging and monitoring are flaws that lead to inability to detect malicious use of a system. Without monitoring responding to breaches is impossible since one does not even know what is happening. Proper logging and monitoring are essential in making sure that one can react to security breaches and fix any vulnerabilities immediately.
 
 There is no logger currently in use in the project.  There is no way to detect attackers that are using the vulnerabilities of the code for malicious requests.
 
