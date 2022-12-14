@@ -72,4 +72,4 @@ Failures in security logging and monitoring are flaws that lead to inability to 
 
 There is no logger currently in use in the project.  There is no way to detect attackers that are using the vulnerabilities of the code for malicious requests.
 
-Fixing this issue requires proper monitoring to be set up.  We can simply add a logger to our project and configure it to log important actions in the app. We could for example log every time that a message is created or the admin logs etc. The monitoring function can be achieved with proper middleware as well.  
+Fixing this issue requires proper monitoring to be set up.  We can simply add a logger to our project and configure it to log important actions in the app. We could for example log every time that a message is created or the admin logs in etc. The monitoring function can be achieved with a proper middleware as well.  
