@@ -12,7 +12,7 @@ https://github.com/lautanal/CyberSecurityBase_Project_1
     source venv/bin/activate  
     pip install -r requirements.txt  
 - Start the server:  
-    python manage.py runserver  
+    python3 manage.py runserver  
     open the localhost page http://127.0.0.1:8000/  
 
 ##### Users already in the system:  
