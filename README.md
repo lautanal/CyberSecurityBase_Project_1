@@ -7,8 +7,13 @@ https://github.com/lautanal/CyberSecurityBase_Project_1
 
 ## Install instructions
 - Clone the directory
-- Make a virtual environment from requirements.txt
-- Start the server with: python manage.py runserver
+- Make a virtual environmen:
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+- Start the server:
+    python manage.py runserver
+    open the localhost page http://127.0.0.1:8000/
 
 ##### Users already in the system:  
 - `admin:admin`
